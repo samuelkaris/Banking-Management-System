@@ -248,11 +248,44 @@ void EmployeePassbookPrint(int employeeId,CustomerdatabaseNode* required_employe
 }
 */
 
+string setPass(bool show_asterisk = true)
+{
+    const char BACKSPACE = 8;//ASCII code for BACKSPACE Key
+    const char ENTER = 13;//ASCII code for ENTER Key
+    string pass = " ";//initialize string
+    char c = ' ';//initialize character 
+
+    while ((c = _getch()) != ENTER)
+    {
+        if (c == BACKSPACE)
+        {
+            if (pass.length() != 0)
+            {
+                if (show_asterisk)
+                   cout << "\b \b";
+                pass.resize(pass.length() - 1); //resize the length of pass 
+            }
+        }
+        else if (c == 0 || c == 224)//when player press esc key
+        {
+            _getch();
+            continue;
+        }
+        else
+        {
+            pass.push_back(c);
+            cout << '*';
+        }
+    }
+    cout << endl;
+    return pass;
+}
+
 signed main()
 {
     int ManagerId; // Bank Manager information
-    char ManagerPassword[9];
-    char employeePassword[9];
+    string ManagerPassword;
+    string employeePassword;
     string line;
     cout << "Welcome to the Bank Management System" << endl
          << "Create an account for the manager" << endl
@@ -270,12 +303,8 @@ signed main()
         }
         cout << "Your Id should contain 10 OR LESS DIGITS ONLY!!. TRY AGAIN" << endl;
     }
-    cout << "Enter an 8 character Manager Password: ";
-    //cin >> ManagerPassword;
-    for(int i=0;i<8;i++) {
-			ManagerPassword[i]=getch();
-			cout<<"*"; //To mask the user input with '*' because it is a password.
-	    }
+    cout << "Enter a Manager Password: ";
+    ManagerPassword=setPass();
     cout <<endl<< "Account created successfully" << endl
          << flush;
       system("pause");
@@ -298,12 +327,8 @@ signed main()
              << "Employee Id: " << i + 1 << endl
              << "Enter Employee Name: ";
         cin >> EmployeeName;
-        cout << "Enter an 8 character Employee Password: ";
-        //cin >> EmployeePassword;
-        for(int i=0;i<8;i++) {
-			employeePassword[i]=getch();
-			cout<<"*"; //To mask the user input with '*' because it is a password.
-	    }
+        cout << "Enter an Employee Password: ";
+        employeePassword=setPass();
 
         
         EmployeeNode *n = new EmployeeNode(i + 1,/* EmployeePassword, */ EmployeeName); // Employee Id is 1 greater than location of that id in array!
@@ -331,17 +356,13 @@ signed main()
         {
             string phoneNumber;
             string name;
-            char password[9];
+            string password;
             cout << "Enter Name: ";
             cin >> name;
             cout << "Enter Phone Number: ";
             cin >> phoneNumber;
             cout << "Enter an 8 character password: ";
-            //cin >> password;
-            for(int i=0;i<8;i++) {
-			    password[i]=getch();
-			    cout<<"*"; //To mask the user input with '*' because it is a password.
-	        }
+            password=setPass();
             CustomerNode *c = new CustomerNode(customerNumber + 1, name, phoneNumber, password); // NOTE: > CustomerID is 1 greater than array location
             // cout<<c->customerId<<endl;
             cout << endl
@@ -361,7 +382,7 @@ signed main()
             cout << "Enter Customer ID: ";
             cin >> CustomerId;
             cout << "Enter Password: ";
-            cin >> CustomerPassword;
+            CustomerPassword=setPass();
 
             int low = 0, high = CustomerVector.size();
             bool find = false;
@@ -410,30 +431,14 @@ signed main()
         if (function_required == 3)
         {
             int EmployeeId;
-            char EmployeePassword[9];
+            string EmployeePassword;
             cout << "Enter Employee Id: ";
             cin >> EmployeeId;
             cout << "Enter Employee Password: ";
-            //cin >> EmployeePassword;
-            for(int i=0;i<8;i++) {
-			    EmployeePassword[i]=getch();
-			    cout<<"*"; //To mask the user input with '*' because it is a password.
-            }
-              if(EmployeeId > 0 and EmployeeId <= EmployeesNumber && strcmp(employeePassword,EmployeePassword)==0) {
-                  cout<<"yay"<<endl;
-              }
-              else{
-                  cout<<"nay"<<endl;
-              }
-            // if(EmployeeId > 0 and EmployeeId <= EmployeesNumber) {
-            //     cout<<"yay"<<endl;
-            // }
-            // else{
-            //     cout<<"nay"<<endl;
-            // }
-            //if (EmployeeId > 0 and EmployeeId <= EmployeesNumber /*Employeearray[EmployeeId - 1]->ConfirmPassword(EmployeePassword) == true*/&& strcmp(employeePassword,EmployeePassword)==0)
-            //if(EmployeeId > 0 and EmployeeId <= EmployeesNumber && strcmp(employeePassword,EmployeePassword)==0)
-            /*
+            EmployeePassword=setPass();
+ 
+            if(EmployeeId > 0 and EmployeeId <= EmployeesNumber && employeePassword.compare(EmployeePassword)==0)
+            
             {
                 int CustomerId, amount;
                 int debcre = 0;
@@ -510,35 +515,23 @@ signed main()
             {
                 cout << "OOPS! Invalid Employee Id or Password" << endl;
             } 
-            */
+            
             
         } 
 
         if (function_required == 4)
         {
             int managerID;
-            char managerPASSWORD[9];
+            string managerPASSWORD;
 
         tryagain:
             cout << "Enter manager Id: ";
             cin >> managerID;
 
             cout << "Enter password: ";
-            //cin >> managerPASSWORD;
-            for(int i=0;i<8;i++) {
-			managerPASSWORD[i]=getch();
-			cout<<"*"; //To mask the user input with '*' because it is a password.
-	    }
-        for(int i=0;i<8;i++) {
-			cout<<ManagerPassword[i]; //To mask the user input with '*' because it is a password.
-	    }
-        cout<<endl;
-        for(int i=0;i<8;i++) {
-			cout<<managerPASSWORD[i]; //To mask the user input with '*' because it is a password.
-	    }
-        cout<<endl;
+            managerPASSWORD=setPass();
 
-            if (managerID == ManagerId && strcmp(ManagerPassword,managerPASSWORD)==0)
+            if (managerID == ManagerId && ManagerPassword.compare(managerPASSWORD)==0)
             {
                 cout <<endl<< "Login Successful" << endl
                      << flush;
