@@ -6,6 +6,9 @@
 #include "bits/stdc++.h"
 #include <ctime>
 #include <string.h>
+#include <conio.h>
+#include <sstream>
+//#include <string>
 using namespace std;
 
 class CustomerdatabaseNode
@@ -72,20 +75,21 @@ class EmployeeNode
 { // Employees data Node
 private:
     int EmployeeId;
-    string EmployeePassword, EmployeeName;
-
+    string EmployeeName;
+    //char EmployeePassword[9];
 public:
     CustomerdatabaseNode *toptransaction;
-    EmployeeNode(int EmployeeId, string EmployeePassword, string EmployeeName)
+    EmployeeNode(int EmployeeId,/* char EmployeePassword[], */ string EmployeeName)
     {
         this->EmployeeId = EmployeeId;
-        this->EmployeePassword = EmployeePassword;
+       // this->EmployeePassword = EmployeePassword;
         this->EmployeeName = EmployeeName;
         toptransaction = NULL;
     }
-    bool ConfirmPassword(string password)
+    /*
+    bool ConfirmPassword(char* password[])
     { // Function in class to confirm the password entered!
-        if (password == EmployeePassword)
+        if (strcmp(password,PASSWORD)==0)
         {
             return true;
         }
@@ -93,8 +97,9 @@ public:
         {
             return false;
         }
-    }
+    } */
 };
+
 
 // Function to print passbook of consumer's transaction
 void PassbookPrint(int customerId, CustomerdatabaseNode *required_passbook)
@@ -246,22 +251,40 @@ void EmployeePassbookPrint(int employeeId,CustomerdatabaseNode* required_employe
 signed main()
 {
     int ManagerId; // Bank Manager information
-    string ManagerPassword;
+    char ManagerPassword[9];
+    char employeePassword[9];
+    string line;
     cout << "Welcome to the Bank Management System" << endl
          << "Create an account for the manager" << endl
          << endl;
     cout << "Enter Manager Id: ";
-    cin >> ManagerId;
-    cout << "Enter Manager Password: ";
-    cin >> ManagerPassword;
-    cout << "Account created successfully" << endl
+    while (getline(cin, line))
+    {
+        std::stringstream ss(line);
+        if (ss >> ManagerId)
+        {
+            if (ss.eof())
+            {   // Success
+                break;
+            }
+        }
+        cout << "Your Id should contain 10 OR LESS DIGITS ONLY!!. TRY AGAIN" << endl;
+    }
+    cout << "Enter an 8 character Manager Password: ";
+    //cin >> ManagerPassword;
+    for(int i=0;i<8;i++) {
+			ManagerPassword[i]=getch();
+			cout<<"*"; //To mask the user input with '*' because it is a password.
+	    }
+    cout <<endl<< "Account created successfully" << endl
          << flush;
-    //  system("pause");
-    //  system("cls");
-    system("read -p 'Press Enter to continue...' var");
-    system("clear");
+      system("pause");
+      system("cls");
+    //system("read -p 'Press Enter to continue...' var");
+    //system("clear");
 
     int EmployeesNumber;
+   
     cout << "Enter number of Employees in bank: ";
     cin >> EmployeesNumber; // Employees in bank
     EmployeeNode **Employeearray;
@@ -269,18 +292,27 @@ signed main()
     for (int i = 0; i < EmployeesNumber; i++)
     {
         int EmployeeId;
-        string EmployeeName, EmployeePassword;
+        string EmployeeName; 
+        
         cout << endl
              << "Employee Id: " << i + 1 << endl
              << "Enter Employee Name: ";
         cin >> EmployeeName;
-        cout << "Enter Employee Password: ";
-        cin >> EmployeePassword;
-        EmployeeNode *n = new EmployeeNode(i + 1, EmployeePassword, EmployeeName); // Employee Id is 1 greater than location of that id in array!
+        cout << "Enter an 8 character Employee Password: ";
+        //cin >> EmployeePassword;
+        for(int i=0;i<8;i++) {
+			employeePassword[i]=getch();
+			cout<<"*"; //To mask the user input with '*' because it is a password.
+	    }
+
+        
+        EmployeeNode *n = new EmployeeNode(i + 1,/* EmployeePassword, */ EmployeeName); // Employee Id is 1 greater than location of that id in array!
         Employeearray[i] = n;
     }
-    system("read -p 'Press Enter to proceed to main menu...' var");
-    system("clear");
+    system("pause");
+    system("cls");
+    //system("read -p 'Press Enter to proceed to main menu...' var");
+    //system("clear");
     bool done;
     int customerNumber = 0;
     vector<CustomerNode *> CustomerVector;
@@ -298,13 +330,18 @@ signed main()
         if (function_required == 1)
         {
             string phoneNumber;
-            string password, name;
+            string name;
+            char password[9];
             cout << "Enter Name: ";
             cin >> name;
             cout << "Enter Phone Number: ";
             cin >> phoneNumber;
-            cout << "Enter password: ";
-            cin >> password;
+            cout << "Enter an 8 character password: ";
+            //cin >> password;
+            for(int i=0;i<8;i++) {
+			    password[i]=getch();
+			    cout<<"*"; //To mask the user input with '*' because it is a password.
+	        }
             CustomerNode *c = new CustomerNode(customerNumber + 1, name, phoneNumber, password); // NOTE: > CustomerID is 1 greater than array location
             // cout<<c->customerId<<endl;
             cout << endl
@@ -373,16 +410,34 @@ signed main()
         if (function_required == 3)
         {
             int EmployeeId;
-            string EmployeePassword;
+            char EmployeePassword[9];
             cout << "Enter Employee Id: ";
             cin >> EmployeeId;
             cout << "Enter Employee Password: ";
-            cin >> EmployeePassword;
-            if (EmployeeId > 0 and EmployeeId <= EmployeesNumber and Employeearray[EmployeeId - 1]->ConfirmPassword(EmployeePassword) == true)
+            //cin >> EmployeePassword;
+            for(int i=0;i<8;i++) {
+			    EmployeePassword[i]=getch();
+			    cout<<"*"; //To mask the user input with '*' because it is a password.
+            }
+              if(EmployeeId > 0 and EmployeeId <= EmployeesNumber && strcmp(employeePassword,EmployeePassword)==0) {
+                  cout<<"yay"<<endl;
+              }
+              else{
+                  cout<<"nay"<<endl;
+              }
+            // if(EmployeeId > 0 and EmployeeId <= EmployeesNumber) {
+            //     cout<<"yay"<<endl;
+            // }
+            // else{
+            //     cout<<"nay"<<endl;
+            // }
+            //if (EmployeeId > 0 and EmployeeId <= EmployeesNumber /*Employeearray[EmployeeId - 1]->ConfirmPassword(EmployeePassword) == true*/&& strcmp(employeePassword,EmployeePassword)==0)
+            //if(EmployeeId > 0 and EmployeeId <= EmployeesNumber && strcmp(employeePassword,EmployeePassword)==0)
+            /*
             {
                 int CustomerId, amount;
                 int debcre = 0;
-                ;
+                
                 cout << "Enter Customer Id: ";
                 cin >> CustomerId;
                 if (CustomerId > 0 and CustomerId <= customerNumber)
@@ -454,29 +509,43 @@ signed main()
             else
             {
                 cout << "OOPS! Invalid Employee Id or Password" << endl;
-            }
-        }
+            } 
+            */
+            
+        } 
 
         if (function_required == 4)
         {
             int managerID;
-            string managerPASSWORD;
+            char managerPASSWORD[9];
 
         tryagain:
             cout << "Enter manager Id: ";
             cin >> managerID;
 
             cout << "Enter password: ";
-            cin >> managerPASSWORD;
+            //cin >> managerPASSWORD;
+            for(int i=0;i<8;i++) {
+			managerPASSWORD[i]=getch();
+			cout<<"*"; //To mask the user input with '*' because it is a password.
+	    }
+        for(int i=0;i<8;i++) {
+			cout<<ManagerPassword[i]; //To mask the user input with '*' because it is a password.
+	    }
+        cout<<endl;
+        for(int i=0;i<8;i++) {
+			cout<<managerPASSWORD[i]; //To mask the user input with '*' because it is a password.
+	    }
+        cout<<endl;
 
-            if (managerID == ManagerId && managerPASSWORD == ManagerPassword)
+            if (managerID == ManagerId && strcmp(ManagerPassword,managerPASSWORD)==0)
             {
-                cout << "Login Successful" << endl
+                cout <<endl<< "Login Successful" << endl
                      << flush;
-                //              system("PAUSE");
-                //              system("CLS");
-                system("read -p 'Press Enter to continue...' var");
-                system("clear");
+                system("PAUSE");
+                system("CLS");
+            //  system("read -p 'Press Enter to continue...' var");
+            //  system("clear");
 
                 int manager_required;
             valid:
@@ -514,7 +583,7 @@ signed main()
                     }
                     else
                     {
-                        cout << "OOPS! Invalid Customer Id !" << endl;
+                        cout <<endl<< "OOPS! Invalid Customer Id !" << endl;
                     }
                 }
                 /*
@@ -546,8 +615,10 @@ signed main()
         {
             done = true;
         }
-        system("read -p 'Press Enter to go back to main menu...' var");
-        system("clear");
+        system("pause");
+        system("cls");
+        // system("read -p 'Press Enter to go back to main menu...' var");
+        // system("clear");
         done = false;
         /*
                 int completed;
