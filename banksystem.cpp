@@ -287,6 +287,7 @@ signed main()
     string ManagerPassword;
     string employeePassword;
     string line;
+    bool length;
     cout << "Welcome to the Bank Management System" << endl
          << "Create an account for the manager" << endl
          << endl;
@@ -303,11 +304,23 @@ signed main()
         }
         cout << "Your Id should contain 10 OR LESS DIGITS ONLY!!. TRY AGAIN" << endl;
     }
-    cout << "Enter a Manager Password: ";
-    ManagerPassword=setPass();
-    cout <<endl<< "Account created successfully" << endl
-         << flush;
-      system("pause");
+    do{
+        cout << "Enter a Manager Password: ";
+        ManagerPassword=setPass();
+        if(ManagerPassword.length()<8)
+        {
+            cout<<"Password must be at least 8 characters"<<endl;
+        }
+        else
+        {
+            cout <<endl<< "Account created successfully" << endl
+            << flush;
+            length=true;
+        }
+    }
+    while(length==false);
+    
+         system("pause");
       system("cls");
     //system("read -p 'Press Enter to continue...' var");
     //system("clear");
@@ -327,8 +340,22 @@ signed main()
              << "Employee Id: " << i + 1 << endl
              << "Enter Employee Name: ";
         cin >> EmployeeName;
-        cout << "Enter an Employee Password: ";
-        employeePassword=setPass();
+        do{
+            cout << "Enter an Employee Password: ";
+            employeePassword=setPass();
+            if(employeePassword.length()<8)
+            {
+                cout<<"Password must be at least 8 characters"<<endl;
+                length=false;
+            }
+            else
+            {
+                cout <<endl<< "Employee account created successfully" << endl
+                << flush;
+                length=true;
+            }
+        } while(length==false);
+        
 
         
         EmployeeNode *n = new EmployeeNode(i + 1,/* EmployeePassword, */ EmployeeName); // Employee Id is 1 greater than location of that id in array!
@@ -361,10 +388,25 @@ signed main()
             cin >> name;
             cout << "Enter Phone Number: ";
             cin >> phoneNumber;
-            cout << "Enter an 8 character password: ";
-            password=setPass();
+            do{
+                cout << "Enter an 8 character password: ";
+                password=setPass();
+                if(password.length()<8)
+                {
+                    cout<<"Password must be at least 8 characters"<<endl;
+                    length=false;
+                }
+                else
+                {
+                    cout <<endl<< "Customer account created successfully" << endl
+                    << flush;
+                    length=true;
+                }
+            } while(length==false);
+            
             CustomerNode *c = new CustomerNode(customerNumber + 1, name, phoneNumber, password); // NOTE: > CustomerID is 1 greater than array location
-            // cout<<c->customerId<<endl;
+            system("pause");
+            system("cls");
             cout << endl
                  << "Customer Details:" << endl;
             cout << "Customer Id: " << customerNumber + 1 << endl
